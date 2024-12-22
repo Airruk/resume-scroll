@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from "react";
-import { TimelineFilters } from "./(components)/timeline-filters";
-import { TimelineMilestone } from "./(components)/timeline-milestone";
-import { timelineData } from "./(components)/timeline-data";
+import { TimelineFilters } from "../(components)/timeline-filters";
+import { TimelineMilestone } from "../(components)/timeline-milestone";
+import { timelineData } from "../(components)/timeline-data";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowDownIcon } from "lucide-react";
