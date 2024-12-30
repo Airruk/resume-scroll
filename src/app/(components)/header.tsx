@@ -12,9 +12,6 @@ import { ContactForm } from "./contact-form";
 export function Header() {
   const { scrollYProgress } = useScroll();
   const [progress, setProgress] = React.useState(0);
-  const [currentYear, setCurrentYear] = React.useState(
-    new Date().getFullYear(),
-  );
   const [contactOpen, setContactOpen] = React.useState(false);
   const startYear = 1985;
   const endYear = new Date().getFullYear();
@@ -26,11 +23,9 @@ export function Header() {
   React.useEffect(() => {
     const unsubscribe = scrollYProgress.onChange((value) => {
       setProgress(value * 100);
-      const yearIndex = Math.floor(value * (years.length - 1));
-      setCurrentYear(years[yearIndex] || endYear);
     });
     return () => unsubscribe();
-  }, [scrollYProgress, years]);
+  }, [scrollYProgress, years, endYear]);
 
   return (
     <header
@@ -52,7 +47,7 @@ export function Header() {
                 Eric Doster
               </div>
               <div className="text-sm text-muted-foreground">
-                Product Builder | Strategist | Learner
+              Believer | Husband | Father | Builder | Cultivator
               </div>
             </div>
           </div>
@@ -79,7 +74,6 @@ export function Header() {
         <Progress
           value={progress}
           className="h-1 rounded-none bg-muted/50"
-          indicatorClassName="bg-foreground transition-all duration-300"
         />
 
         <div

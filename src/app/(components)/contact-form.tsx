@@ -12,8 +12,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-export function ContactForm({ open, onOpenChange }) {
-  const handleSubmit = (e) => {
+// Define the props type
+interface ContactFormProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function ContactForm({ open, onOpenChange }: ContactFormProps) {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission
     onOpenChange(false);
@@ -30,19 +36,32 @@ export function ContactForm({ open, onOpenChange }) {
             <Label htmlFor="name">
               Name
             </Label>
-            <Input placeholder="Your name" required />
+            <Input 
+              id="name" 
+              name="name" 
+              placeholder="Your name" 
+              required 
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">
               Email
             </Label>
-            <Input type="email" placeholder="Your email" required />
+            <Input 
+              id="email" 
+              name="email" 
+              type="email" 
+              placeholder="Your email" 
+              required 
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="message">
               Message
             </Label>
             <Textarea
+              id="message"
+              name="message"
               placeholder="Your message"
               className="min-h-[100px]"
               required

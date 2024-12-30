@@ -5,10 +5,8 @@ import { Button } from "@/components/ui/button";
 import {
   GraduationCapIcon,
   HeartIcon,
-  HomeIcon,
   BrainCircuitIcon,
   BriefcaseIcon,
-  UsersIcon,
   StarIcon,
 } from "lucide-react";
 
@@ -16,6 +14,10 @@ export function TimelineFilters({
   activeFilter,
   onFilterChange,
   className = "",
+}: {
+  activeFilter: string;
+  onFilterChange: (filterId: string) => void;
+  className?: string;
 }) {
   const filters = [
     { id: "all", label: "All", icon: BrainCircuitIcon },
@@ -28,7 +30,7 @@ export function TimelineFilters({
   return (
     <div className={className}>
       <div className="flex justify-center gap-4 flex-wrap">
-        {filters.map((filter, index) => (
+        {filters.map((filter) => (
           <Button
             key={filter.id}
             variant={activeFilter === filter.id ? "default" : "outline"}
@@ -38,9 +40,8 @@ export function TimelineFilters({
                 ? "bg-primary text-primary-foreground shadow-lg"
                 : "hover:bg-primary/10"
             }`}
-            id={`jmypxp_${index}`}
           >
-            <filter.icon className="w-4 h-4 mr-3" id={`u88ccd_${index}`} />
+            <filter.icon className="w-4 h-4 mr-3" />
             {filter.label}
           </Button>
         ))}

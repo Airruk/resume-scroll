@@ -1,21 +1,18 @@
-'use client';
-
-import React from "react";
+import React, { ReactNode } from "react";
 import { Header } from "./(components)/header";
 import "./globals.css";
 
-export default function Layout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html>
-        <body>
-            <div className="min-h-screen bg-background text-foreground">
-      <Header />
-      <main className="pt-24">
-        {children}
-      </main>
-    </div>
-        </body>
+    <html lang="en">
+      <body>
+        <div className="min-h-screen bg-background text-foreground">
+          <Header />
+          <main className="pt-24">
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
-
   );
 }

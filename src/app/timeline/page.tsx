@@ -7,18 +7,17 @@ import { timelineData } from "../(components)/timeline-data";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowDownIcon } from "lucide-react";
+import { Milestone } from "@/types/milestone";
 
 export default function Timeline() {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [visibleMilestones, setVisibleMilestones] = useState([]);
+  const [visibleMilestones, setVisibleMilestones] = useState<Milestone[]>([]);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const milestonesPerPage = 3;
+  const milestonesPerPage = 10;
 
   const sortedTimelineData = [...timelineData].sort((a, b) => {
-    const aYear = parseInt(a.date.split(" ")[0]);
-    const bYear = parseInt(b.date.split(" ")[0]);
-    return bYear - aYear;
+    // Sort by startDate in descending order (most recent first)
+    return b.startDate.getTime() - a.startDate.getTime();
   });
 
   const filteredMilestones = sortedTimelineData.filter(
@@ -27,8 +26,13 @@ export default function Timeline() {
 
   useEffect(() => {
     setPage(1);
-    setVisibleMilestones(filteredMilestones.slice(0, milestonesPerPage));
-  }, [activeFilter]);
+    setVisibleMilestones(
+      filteredMilestones.slice(0, milestonesPerPage).map(milestone => ({
+        ...milestone,
+        id: milestone.id.toString() // Convert id to string
+      }))
+    );
+  }, [activeFilter, filteredMilestones]);
 
   const loadMore = () => {
     const nextPage = page + 1;
@@ -37,7 +41,10 @@ export default function Timeline() {
 
     setVisibleMilestones([
       ...visibleMilestones,
-      ...filteredMilestones.slice(start, end),
+      ...filteredMilestones.slice(start, end).map(milestone => ({
+        ...milestone,
+        id: milestone.id.toString() // Convert id to string
+      })),
     ]);
     setPage(nextPage);
   };
@@ -81,8 +88,7 @@ export default function Timeline() {
               key={milestone.id}
               milestone={milestone}
               index={index}
-              id={`12g99v_${index}`}
-            />
+              />
           ))}
         </div>
 

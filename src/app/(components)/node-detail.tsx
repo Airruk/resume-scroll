@@ -1,41 +1,72 @@
 'use client';
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-export function NodeDetail({ node, onClose }) {
+// Define an interface for the node structure
+interface NodeDetails {
+  id: string;
+  label: string;
+  type: string;
+  details?: {
+    description?: string;
+    skills?: string[];
+    achievements?: string[];
+  };
+}
+
+// Define props interface
+interface NodeDetailProps {
+  node: NodeDetails | null;
+  onClose: () => void;
+}
+
+export function NodeDetail({ node, onClose }: NodeDetailProps) {
   if (!node?.details) return null;
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader
-        className="flex flex-row items-center justify-between"
-      >
-        <CardTitle>{node.details.title}</CardTitle>
-        <Button variant="ghost" size="icon" onClick={onClose}>
-          <X className="h-4 w-4" />
-        </Button>
-      </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground mb-4">
-          {node.details.description}
-        </p>
-        <div className="space-y-2">
-          <h4 className="font-semibold">
-            Key Achievements
-          </h4>
-          <div className="flex flex-wrap gap-2">
-            {node.details.achievements.map((achievement, index) => (
-              <Badge key={index} variant="secondary" id={`5ib9sa_${index}`}>
-                {achievement}
-              </Badge>
-            ))}
+    <Dialog open={!!node} onOpenChange={() => onClose()}>
+      <DialogContent className="sm:max-w-[600px]">
+        <DialogHeader>
+          <DialogTitle>{node.label}</DialogTitle>
+        </DialogHeader>
+        
+        {node.details.description && (
+          <div className="mb-4">
+            <h3 className="font-semibold mb-2">Description</h3>
+            <p className="text-muted-foreground">{node.details.description}</p>
           </div>
+        )}
+
+        {node.details.skills && node.details.skills.length > 0 && (
+          <div className="mb-4">
+            <h3 className="font-semibold mb-2">Skills</h3>
+            <ul className="list-disc list-inside">
+              {node.details.skills.map((skill, index) => (
+                <li key={index} className="text-muted-foreground">{skill}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {node.details.achievements && node.details.achievements.length > 0 && (
+          <div>
+            <h3 className="font-semibold mb-2">Achievements</h3>
+            <ul className="list-disc list-inside">
+              {node.details.achievements.map((achievement, index) => (
+                <li key={index} className="text-muted-foreground">{achievement}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mt-4 flex justify-end">
+          <Button onClick={onClose} variant="outline">
+            Close
+          </Button>
         </div>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

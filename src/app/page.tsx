@@ -7,37 +7,46 @@ import { timelineData } from "./(components)/timeline-data";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowDownIcon } from "lucide-react";
+import { Milestone } from "@/types/milestone";
 
 export default function Timeline() {
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [visibleMilestones, setVisibleMilestones] = useState([]);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const milestonesPerPage = 3;
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [visibleMilestones, setVisibleMilestones] = useState<Milestone[]>([]);
+  const [page, setPage] = useState<number>(1);
+  
+  const milestonesPerPage = 50;
 
-  const sortedTimelineData = [...timelineData].sort((a, b) => {
+  const sortedTimelineData: Milestone[] = [...timelineData].sort((a, b) => {
     const aYear = parseInt(a.date.split(" ")[0]);
     const bYear = parseInt(b.date.split(" ")[0]);
     return bYear - aYear;
   });
 
-  const filteredMilestones = sortedTimelineData.filter(
+  const filteredMilestones: Milestone[] = sortedTimelineData.filter(
     (milestone) => activeFilter === "all" || milestone.type === activeFilter,
   );
 
   useEffect(() => {
     setPage(1);
-    setVisibleMilestones(filteredMilestones.slice(0, milestonesPerPage));
-  }, [activeFilter]);
+    setVisibleMilestones(
+      filteredMilestones.slice(0, milestonesPerPage).map(milestone => ({
+        ...milestone,
+        id: milestone.id.toString()
+      }))
+    );
+  }, [activeFilter, filteredMilestones]);
 
   const loadMore = () => {
     const nextPage = page + 1;
     const start = (nextPage - 1) * milestonesPerPage;
     const end = start + milestonesPerPage;
 
-    setVisibleMilestones([
-      ...visibleMilestones,
-      ...filteredMilestones.slice(start, end),
+    setVisibleMilestones((prevVisibleMilestones) => [
+      ...prevVisibleMilestones,
+      ...filteredMilestones.slice(start, end).map(milestone => ({
+        ...milestone,
+        id: milestone.id.toString()
+      })),
     ]);
     setPage(nextPage);
   };
@@ -59,7 +68,7 @@ export default function Timeline() {
             className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
           >
             Explore my career progression through key milestones, achievements,
-            and contributions to product development and team leadership
+            and contributions to product development and team leadership interwoven with some key tidbits about my personal journey.
           </p>
         </div>
 
@@ -76,12 +85,11 @@ export default function Timeline() {
         />
 
         <div className="space-y-24">
-          {visibleMilestones.map((milestone, index) => (
+          {visibleMilestones.map((milestone) => (
             <TimelineMilestone
               key={milestone.id}
               milestone={milestone}
-              index={index}
-              id={`12g99v_${index}`}
+              index={Number(milestone.id)}
             />
           ))}
         </div>

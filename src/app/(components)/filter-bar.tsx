@@ -9,7 +9,13 @@ import {
   CodeIcon,
 } from "lucide-react";
 
-export function FilterBar({ activeFilter, onFilterChange }) {
+// Define the props type
+interface FilterBarProps {
+  activeFilter: string;
+  onFilterChange: (filterId: string) => void;
+}
+
+export function FilterBar({ activeFilter, onFilterChange }: FilterBarProps) {
   const filters = [
     { id: "all", label: "All", icon: BrainCircuitIcon },
     { id: "leadership", label: "Leadership", icon: UsersIcon },
