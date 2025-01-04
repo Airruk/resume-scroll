@@ -4,9 +4,9 @@ import React from "react";
 import { useScroll } from "framer-motion";
 import { timelineData } from "./timeline-data";
 import { Button } from "@/components/ui/button";
-import { ContactIcon, FileTextIcon } from "lucide-react";
+import { ContactIcon, FileTextIcon, PlayCircleIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ContactForm } from "./contact-form";
+import { ContactModal } from "./contact-modal";
 import { 
   GraduationCapIcon,
   HeartIcon,
@@ -37,8 +37,6 @@ const getCategoryColor = (type: string) => {
 
 export function Header({ activeFilter }: HeaderProps) {
   const { scrollYProgress } = useScroll();
-  const [progress, setProgress] = React.useState(100);
-  const [currentYear, setCurrentYear] = React.useState(new Date().getFullYear());
   const [contactOpen, setContactOpen] = React.useState(false);
   const [showCallout, setShowCallout] = React.useState(true);
 
@@ -82,12 +80,16 @@ export function Header({ activeFilter }: HeaderProps) {
         const milestoneEndYear = currentMilestone.endDate.getFullYear();
         // Invert the progress calculation so 100% is at the right (newest) and 0% is at the left (oldest)
         const progressPercentage = 100 - ((milestoneEndYear - startYear) / (endYear - startYear)) * 100;
-        setProgress(100 - progressPercentage); // Invert again to make the cursor move right to left
-        setCurrentYear(milestoneEndYear);
+        const currentYear = milestoneEndYear;
+        
+        // Update state
+        setShowCallout(false);
       } else {
         // If no milestone is found (at the very start), set to the most recent year
-        setProgress(100);
-        setCurrentYear(endYear);
+        const currentYear = endYear;
+        
+        // Update state
+        setShowCallout(false);
       }
     });
     return () => unsubscribe();
@@ -122,19 +124,37 @@ export function Header({ activeFilter }: HeaderProps) {
             <Button
               variant="outline"
               size="sm"
+              asChild
+            >
+              <a href="https://intro.doster.fyi" target="_blank" rel="noopener noreferrer">
+                <PlayCircleIcon className="w-4 h-4 mr-2" />
+                Intro
+              </a>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setContactOpen(true)}
             >
               <ContactIcon className="w-4 h-4 mr-2" />
               Contact
             </Button>
-            <Button variant="outline" size="sm">
-              <FileTextIcon className="w-4 h-4 mr-2" />
-              Resume
+            <Button 
+              variant="outline" 
+              size="sm"
+              asChild
+            >
+              <a href="https://resume.doster.fyi" target="_blank" rel="noopener noreferrer">
+                <FileTextIcon className="w-4 h-4 mr-2" />
+                Resume
+              </a>
             </Button>
             <ThemeToggle />
           </div>
         </div>
       </div>
+
+      <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
 
       <div className="relative pb-24 bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4">
@@ -144,12 +164,12 @@ export function Header({ activeFilter }: HeaderProps) {
               <div className="absolute left-0 right-0 h-full bg-muted/50" />
               <div className="absolute transform -translate-x-1/2 transition-all duration-200"
                 style={{ 
-                  left: `${progress}%`,
+                  left: '100%',
                 }}
               >
                 {/* Current year display */}
                 <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 font-medium text-green-800 dark:text-green-400">
-                  {currentYear}
+                  {endYear}
                   
                   {/* Callout */}
                   {showCallout && (
@@ -245,11 +265,6 @@ export function Header({ activeFilter }: HeaderProps) {
           </div>
         </div>
       </div>
-
-      <ContactForm
-        open={contactOpen}
-        onOpenChange={setContactOpen}
-      />
     </header>
   );
 }
