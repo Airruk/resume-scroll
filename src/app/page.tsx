@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowDownIcon } from "lucide-react";
 import { Milestone } from "@/types/milestone";
+import { Header } from "./(components)/header";
 
 export default function Timeline() {
   const [activeFilter, setActiveFilter] = useState<string>("all");
@@ -53,10 +54,13 @@ export default function Timeline() {
 
   return (
     <div className="container mx-auto px-4 pb-16">
+      <div className="w-full">
+        <Header activeFilter={activeFilter} />
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-8 pt-32"
+        className="text-center space-y-8 pt-64"
       >
         <div>
           <h1
