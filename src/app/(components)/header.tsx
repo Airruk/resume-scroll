@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { typeColors } from "./timeline-data";
 import { ThemeToggle } from "./theme-toggle";
+import debounce from "lodash/debounce";
 
 interface HeaderProps {
   activeFilter: string;
@@ -37,16 +38,31 @@ const getCategoryColor = (type: string) => {
 
 export function Header({ activeFilter }: HeaderProps) {
   const { scrollYProgress } = useScroll();
+  const [progress, setProgress] = React.useState(100);
+  const [currentYear, setCurrentYear] = React.useState(new Date().getFullYear());
   const [contactOpen, setContactOpen] = React.useState(false);
   const [showCallout, setShowCallout] = React.useState(true);
+  const [isScrolling, setIsScrolling] = React.useState(false);
 
-  // Hide callout after 5 seconds
+  // Hide callout after 5 seconds on initial load
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setShowCallout(false);
+      if (!isScrolling) {
+        setShowCallout(false);
+      }
     }, 5000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isScrolling]);
+
+  // Debounced function to handle scroll stop
+  const handleScrollStop = React.useMemo(
+    () =>
+      debounce(() => {
+        setIsScrolling(false);
+        setShowCallout(true);
+      }, 500),
+    []
+  );
 
   // Filter timeline data based on active filter
   const filteredData = React.useMemo(() => {
@@ -72,28 +88,30 @@ export function Header({ activeFilter }: HeaderProps) {
 
   React.useEffect(() => {
     const unsubscribe = scrollYProgress.onChange((value) => {
-      // Find the current milestone based on scroll position
-      const milestoneIndex = Math.floor(value * filteredData.length);
-      const currentMilestone = filteredData[filteredData.length - 1 - milestoneIndex];
+      // Indicate that scrolling has started
+      setIsScrolling(true);
+      setShowCallout(false);
+
+      // As we scroll down, value goes from 0 to 1
+      // We want the progress to go from right (100%) to left (0%)
+      const timelineProgress = 1 - value;
+      setProgress(timelineProgress * 100);
       
-      if (currentMilestone) {
-        const milestoneEndYear = currentMilestone.endDate.getFullYear();
-        // Invert the progress calculation so 100% is at the right (newest) and 0% is at the left (oldest)
-        const progressPercentage = 100 - ((milestoneEndYear - startYear) / (endYear - startYear)) * 100;
-        const currentYear = milestoneEndYear;
-        
-        // Update state
-        setShowCallout(false);
-      } else {
-        // If no milestone is found (at the very start), set to the most recent year
-        const currentYear = endYear;
-        
-        // Update state
-        setShowCallout(false);
-      }
+      // Calculate the current year based on the scroll progress
+      // When timelineProgress is 1 (top of page), we want endYear
+      // When timelineProgress is 0 (bottom of page), we want startYear
+      const currentYear = Math.round(startYear + (timelineProgress * (endYear - startYear)));
+      setCurrentYear(currentYear);
+
+      // Start the debounced scroll stop handler
+      handleScrollStop();
     });
-    return () => unsubscribe();
-  }, [scrollYProgress, startYear, endYear, filteredData]);
+
+    return () => {
+      unsubscribe();
+      handleScrollStop.cancel();
+    };
+  }, [scrollYProgress, startYear, endYear, handleScrollStop]);
 
   return (
     <header
@@ -162,33 +180,54 @@ export function Header({ activeFilter }: HeaderProps) {
             {/* Timeline cursor */}
             <div className="relative h-1">
               <div className="absolute left-0 right-0 h-full bg-muted/50" />
-              <div className="absolute transform -translate-x-1/2 transition-all duration-200"
+              <div 
+                className="absolute transform -translate-x-1/2 transition-all duration-200"
                 style={{ 
-                  left: '100%',
+                  left: `${progress}%`,
                 }}
               >
                 {/* Current year display */}
                 <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 font-medium text-green-800 dark:text-green-400">
-                  {endYear}
-                  
                   {/* Callout */}
-                  {showCallout && (
+                  {showCallout && !isScrolling && (
                     <>
-                      {/* Circle */}
-                      <div className="absolute -inset-4 border-2 border-dashed border-green-800 dark:border-green-400 rounded-full animate-[spin_10s_linear_infinite]" />
+                      {/* Roughly drawn circle */}
+                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16">
+                        <svg 
+                          className="absolute inset-0 animate-[spin_10s_linear_infinite]"
+                          viewBox="0 0 100 100"
+                        >
+                          <path
+                            d="M50,10 C70,10 85,25 90,45 C95,65 90,85 70,90 C50,95 30,90 10,70 C5,50 10,30 30,10 C35,8 45,8 50,10"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeDasharray="4 4"
+                            className="text-green-800 dark:text-green-400"
+                          />
+                        </svg>
+                      </div>
                       
                       {/* "You Are Here" text */}
                       <div 
-                        className="absolute -right-24 top-0 font-handwritten text-lg text-green-800 dark:text-green-400 transform -rotate-12 animate-bounce"
+                        className="absolute -right-24 font-caveat text-lg text-green-800 dark:text-green-400 transform -rotate-12 animate-bounce"
+                        style={{
+                          top: '0px'
+                        }}
                       >
                         You Are Here
                       </div>
                     </>
                   )}
+                  
+                  {/* Year text */}
+                  <div className="relative z-10">
+                    {currentYear}
+                  </div>
                 </div>
                 
                 {/* Cursor line */}
-                <div className="h-4 w-px bg-green-800 dark:bg-green-400 -top-1.5" />
+                <div className="absolute h-4 w-px bg-green-800 dark:bg-green-400 -top-1.5" />
               </div>
             </div>
 
