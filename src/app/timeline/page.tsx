@@ -1,113 +1,49 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from "react";
-import { TimelineFilters } from "../(components)/timeline-filters";
-import { TimelineMilestone } from "../(components)/timeline-milestone";
-import { timelineData } from "../(components)/timeline-data";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowDownIcon } from "lucide-react";
-import { Milestone } from "@/types/milestone";
+import React, { useEffect, useState } from 'react'
+import Timeline from '@/components/organisms/timeline'
+import { getTimelineItems } from '@/services/timeline'
 
-export default function Timeline() {
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [visibleMilestones, setVisibleMilestones] = useState<Milestone[]>([]);
-  const [page, setPage] = useState(1);
-  const milestonesPerPage = 10;
-
-  const sortedTimelineData = [...timelineData].sort((a, b) => {
-    // Sort by startDate in descending order (most recent first)
-    return b.startDate.getTime() - a.startDate.getTime();
-  });
-
-  const filteredMilestones = sortedTimelineData.filter(
-    (milestone) => activeFilter === "all" || milestone.type === activeFilter,
-  );
+export default function TimelinePage() {
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setPage(1);
-    setVisibleMilestones(
-      filteredMilestones.slice(0, milestonesPerPage).map(milestone => ({
-        ...milestone,
-        id: milestone.id.toString() // Convert id to string
-      }))
-    );
-  }, [activeFilter, filteredMilestones]);
+    async function fetchData() {
+      try {
+        setLoading(true)
+        setError(null)
+        await getTimelineItems()
+      } catch (err) {
+        console.error('Error fetching timeline data:', err)
+        setError(err instanceof Error ? err.message : 'Failed to fetch timeline data')
+      } finally {
+        setLoading(false)
+      }
+    }
 
-  const loadMore = () => {
-    const nextPage = page + 1;
-    const start = (nextPage - 1) * milestonesPerPage;
-    const end = start + milestonesPerPage;
+    fetchData()
+  }, [])
 
-    setVisibleMilestones([
-      ...visibleMilestones,
-      ...filteredMilestones.slice(start, end).map(milestone => ({
-        ...milestone,
-        id: milestone.id.toString() // Convert id to string
-      })),
-    ]);
-    setPage(nextPage);
-  };
+  if (loading) {
+    return (
+      <div className="container mx-auto p-8">
+        <div>Loading...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto p-8">
+        <div>Error: {error}</div>
+      </div>
+    )
+  }
 
   return (
-    <div className="container mx-auto px-4 pb-16">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-8 pt-32"
-      >
-        <div>
-          <h1
-            className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60"
-          >
-            Product Leadership Journey
-          </h1>
-          <p
-            className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
-          >
-            Explore my career progression through key milestones, achievements,
-            and contributions to product development and team leadership
-          </p>
-        </div>
-
-        <TimelineFilters
-          activeFilter={activeFilter}
-          onFilterChange={setActiveFilter}
-          className="bg-background/95 backdrop-blur-md py-3 px-6 rounded-full border shadow-lg inline-flex"
-        />
-      </motion.div>
-
-      <div className="relative mt-24">
-        <div
-          className="absolute top-0 bottom-0 left-1/2 w-px bg-gradient-to-b from-primary/50 to-primary/5 -translate-x-1/2"
-        />
-
-        <div className="space-y-24">
-          {visibleMilestones.map((milestone, index) => (
-            <TimelineMilestone
-              key={milestone.id}
-              milestone={milestone}
-              index={index}
-              />
-          ))}
-        </div>
-
-        {visibleMilestones.length < filteredMilestones.length && (
-          <div className="flex justify-center mt-16">
-            <Button
-              onClick={loadMore}
-              variant="outline"
-              className="group"
-              size="lg"
-            >
-              Load More
-              <ArrowDownIcon
-                className="ml-2 h-4 w-4 group-hover:translate-y-1 transition-transform"
-              />
-            </Button>
-          </div>
-        )}
-      </div>
+    <div className="container mx-auto p-8">
+      <Timeline />
     </div>
-  );
+  )
 }

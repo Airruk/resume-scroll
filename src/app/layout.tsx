@@ -1,34 +1,43 @@
-import React from "react";
-import { Inter, Caveat } from "next/font/google";
-import "./globals.css";
-import { Header } from "./(components)/header";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { ThemeProvider } from '@/components/providers/theme-provider'
+import { QueryProvider } from '@/components/providers/query-provider'
+import { FilterProvider } from '@/contexts/filter-context'
+import { Toaster } from '@/components/ui/toaster'
+import { YearProvider } from '@/contexts/year-context'
 
-const inter = Inter({ subsets: ["latin"] });
-const caveat = Caveat({ 
-  subsets: ["latin"],
-  variable: '--font-caveat',
-});
+const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
-  title: "Interactive Resume Timeline",
-  description: "An interactive timeline of my professional and personal journey",
-};
+export const metadata: Metadata = {
+  title: 'Resume',
+  description: 'Interactive resume built with Next.js',
+}
 
-export default function RootLayout({ 
-  children 
-}: { 
-  children: React.ReactNode 
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} ${caveat.variable}`}>
-        <div className="min-h-screen bg-background text-foreground">
-          <Header activeFilter={""} />
-          <main className="pt-24">
-            {children}
-          </main>
-        </div>
+      <body className={inter.className}>
+        <QueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <FilterProvider>
+              <YearProvider>
+                {children}
+              </YearProvider>
+            </FilterProvider>
+            <Toaster />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
-  );
+  )
 }
