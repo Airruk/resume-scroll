@@ -6,6 +6,7 @@ interface XanoTimelineItem {
   id: number
   title: string
   startDate: string
+  endDate?: string
   displayDate: string
   type: string
   description: string
@@ -19,6 +20,7 @@ interface XanoTimelineItem {
   created_at: string
   updated_at: string
   logo_url?: string
+  company_logo_hosted_url?: string
   _timeline_entry_skills: Array<{
     id: number
     timeline_entry_id: number
@@ -29,24 +31,25 @@ interface XanoTimelineItem {
       created_at: string
     }>
   }>
-  company_logo?: {
-    url: string
-  }
 }
 
 function transformXanoItem(item: XanoTimelineItem): Milestone {
   return {
     id: item.id,
     title: item.title,
-    role: item.role || '',
-    company: item.company || '',
-    location: item.location || '',
-    description: item.description || '',
-    dateRange: item.displayDate || '',
-    startDate: item.startDate,
-    type: item.type?.toLowerCase() as 'career' | 'education' | 'volunteer' | 'personal',
-    skills: item._timeline_entry_skills?.map(skill => skill._skills[0]?.name || '') || [],
-    logoUrl: item.company_logo?.url
+    startDate: new Date(item.startDate),
+    endDate: item.endDate ? new Date(item.endDate) : undefined,
+    displayDate: item.displayDate,
+    type: item.type,
+    description: item.description,
+    location: item.location,
+    role: item.role,
+    company: item.company,
+    logoUrl: item.company_logo_hosted_url,
+    companySize: item.companySize,
+    directReports: item.directReports,
+    institution: item.institution,
+    field: item.field,
   }
 }
 

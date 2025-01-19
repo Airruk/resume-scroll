@@ -43,7 +43,9 @@ export default function TimelinePage() {
 
   return (
     <div className="container mx-auto p-8">
-      <Timeline />
+      <div className="fixed right-8 top-20 z-50 flex items-center gap-2 text-lg font-semibold">
+        <Timeline />
+      </div>
     </div>
   )
 }

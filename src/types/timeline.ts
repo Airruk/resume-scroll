@@ -4,20 +4,21 @@ export interface XanoTimelineItem {
   id: number
   title: string
   startDate: string
+  endDate?: string
   displayDate: string
   type: string
   description: string
   location: string
   role: string
   company: string
+  company_logo_hosted_url: string
   companySize: number
   directReports: number
-  institution: string
-  field: string
+  institution: string | null
+  field: string | null
   created_at: string
   updated_at: string
   company_logo?: {
-    url: string
     access: string
     path: string
     name: string
@@ -28,6 +29,7 @@ export interface XanoTimelineItem {
       width: number
       height: number
     }
+    url: string
   }
   _timeline_entry_skills: Array<{
     id: number

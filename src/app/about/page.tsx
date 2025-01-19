@@ -21,17 +21,9 @@ export default function AboutPage() {
             <h1 className="text-4xl font-bold">Eric Diakonia</h1>
             
             <p className="text-xl text-gray-600">
-              I&apos;m a passionate software engineer with over a decade of experience building innovative solutions 
-              that make a difference. My journey in technology has been driven by a desire to create 
-              meaningful impact through elegant, efficient code.
-            </p>
-
-            <p className="text-gray-600">
-              Throughout my career, I&apos;ve had the privilege of working with cutting-edge technologies 
-              and brilliant teams. I specialize in full-stack development, with a particular focus 
-              on creating scalable, user-centric applications. When I&apos;m not coding, you&apos;ll find me 
-              mentoring other developers, contributing to open-source projects, or exploring new 
-              technologies.
+            Hi, I’m Eric—a product leader and curious builder who loves solving tricky problems and creating things that make life better. I believe the best solutions come from listening deeply, asking thoughtful questions, and not being afraid to try (and fail at) something new.
+Over the years, I’ve learned that great teams are built on trust, creativity thrives with collaboration, and success often hides in the small, unglamorous steps along the way. Outside of work, I’m a dad, a tinkerer, and someone who’s endlessly fascinated by how technology can reshape the world in surprising ways.
+If that sounds like your vibe, let’s connect—I’m always up for the next great challenge.
             </p>
           </div>
         </div>

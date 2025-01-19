@@ -110,6 +110,7 @@ export default function TimelineMilestone({ milestone, isEven }: TimelineMilesto
                       src={milestone.logoUrl}
                       alt={`${milestone.company} logo`}
                       fill
+                      sizes="(max-width: 48px) 100vw, 48px"
                       className="object-contain p-1"
                     />
                   </div>

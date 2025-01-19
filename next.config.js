@@ -4,14 +4,10 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'x8ki-letl-twmt.n7.xano.io',
-      },
-    ],
-  },
+        hostname: '**',
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig

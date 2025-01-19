@@ -67,7 +67,7 @@ export function Header({ className = '' }: HeaderProps) {
               Contact
             </Button>
             <Button variant="ghost" size="sm" asChild>
-              <a href="/resume">
+              <a href="https://resume.doster.fyi" target="_blank" rel="noopener noreferrer">
                 <FileTextIcon className="mr-2 h-4 w-4" />
                 Resume
               </a>
