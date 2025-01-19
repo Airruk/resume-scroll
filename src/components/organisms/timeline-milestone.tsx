@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ListChecksIcon, BriefcaseIcon, GraduationCapIcon, HeartIcon, HomeIcon, StarIcon, HandHelpingIcon } from 'lucide-react'
+import { ListChecksIcon, BriefcaseIcon, GraduationCapIcon, HeartIcon, HomeIcon, StarIcon, HandHelpingIcon, CalendarIcon, MapPinIcon } from 'lucide-react'
 import { Milestone } from '@/types/timeline'
 import { useYear } from '@/contexts/year-context'
 import { useTimelineEntry } from '@/hooks/use-timeline-entry'
+import Image from 'next/image'
 
 const typeIcons = {
   career: BriefcaseIcon,
@@ -94,12 +95,32 @@ export default function TimelineMilestone({ milestone, isEven }: TimelineMilesto
         >
           {/* Card Header */}
           <div className="mb-4">
-            <div className="flex flex-col mb-2">
-              <h3 className="text-lg font-semibold">{milestone.title}</h3>
-              <span className="text-sm text-muted-foreground mt-1">{milestone.dateRange}</span>
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold">{milestone.title}</h3>
+                <span className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
+                  <CalendarIcon className="h-4 w-4" />
+                  {milestone.dateRange}
+                </span>
+              </div>
+              {milestone.logoUrl && (
+                <div className="flex-shrink-0 ml-4">
+                  <div className="relative w-12 h-12 rounded-lg border bg-background p-1">
+                    <Image
+                      src={milestone.logoUrl}
+                      alt={`${milestone.company} logo`}
+                      fill
+                      className="object-contain p-1"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
             <p className="text-sm text-muted-foreground">{milestone.company}</p>
-            <p className="text-sm text-muted-foreground">{milestone.location}</p>
+            <p className="text-sm text-muted-foreground flex items-center gap-1.5 mt-1">
+              <MapPinIcon className="h-4 w-4" />
+              {milestone.location}
+            </p>
           </div>
 
           {/* Description */}

@@ -14,6 +14,7 @@ export const FILTER_TYPES = {
   education: 'Education',
   volunteer: 'Volunteer',
   personal: 'Personal',
+  family: 'Family',
 } as const
 
 export function FilterProvider({ children }: { children: React.ReactNode }) {

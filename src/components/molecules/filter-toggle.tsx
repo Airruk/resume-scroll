@@ -2,14 +2,15 @@
 
 import { Switch } from '@/components/ui/switch'
 import { useFilter, FILTER_TYPES } from '@/contexts/filter-context'
-import { BriefcaseIcon, GraduationCapIcon, HeartIcon, HomeIcon } from 'lucide-react'
+import { BriefcaseIcon, GraduationCapIcon, HeartIcon, HomeIcon, HandHelpingIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const FILTER_ICONS = {
   career: BriefcaseIcon,
   education: GraduationCapIcon,
-  volunteer: HeartIcon,
-  personal: HomeIcon,
+  volunteer: HandHelpingIcon,
+  personal: HeartIcon,
+  family: HomeIcon,
 } as const
 
 export function FilterToggle() {

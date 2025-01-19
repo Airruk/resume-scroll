@@ -18,6 +18,7 @@ interface XanoTimelineItem {
   field: string
   created_at: string
   updated_at: string
+  logo_url?: string
   _timeline_entry_skills: Array<{
     id: number
     timeline_entry_id: number
@@ -28,6 +29,9 @@ interface XanoTimelineItem {
       created_at: string
     }>
   }>
+  company_logo?: {
+    url: string
+  }
 }
 
 function transformXanoItem(item: XanoTimelineItem): Milestone {
@@ -39,8 +43,10 @@ function transformXanoItem(item: XanoTimelineItem): Milestone {
     location: item.location || '',
     description: item.description || '',
     dateRange: item.displayDate || '',
+    startDate: item.startDate,
     type: item.type?.toLowerCase() as 'career' | 'education' | 'volunteer' | 'personal',
-    skills: item._timeline_entry_skills?.map(skill => skill._skills[0]?.name || '') || []
+    skills: item._timeline_entry_skills?.map(skill => skill._skills[0]?.name || '') || [],
+    logoUrl: item.company_logo?.url
   }
 }
 
@@ -49,11 +55,9 @@ async function handleXanoResponse(response: Response) {
     throw new Error('Rate limit exceeded. Please try again later.')
   }
   if (!response.ok) {
-    throw new Error(`Failed to fetch data: ${response.statusText}`)
+    throw new Error(`API request failed with status ${response.status}`)
   }
-  const data = await response.json()
-  console.log('API Response:', data) // Debug log
-  return data
+  return response.json()
 }
 
 export async function getTimelineItems(): Promise<Milestone[]> {
@@ -73,7 +77,14 @@ export async function getTimelineItems(): Promise<Milestone[]> {
       throw new Error('Invalid API response format')
     }
     
-    return items.map(item => transformXanoItem(item))
+    // Transform and sort items by start date in descending order
+    return items
+      .map(item => transformXanoItem(item))
+      .sort((a, b) => {
+        const dateA = new Date(a.startDate).getTime()
+        const dateB = new Date(b.startDate).getTime()
+        return dateB - dateA
+      })
   } catch (error) {
     console.error('Failed to fetch timeline items:', error)
     throw error instanceof Error ? error : new Error('Failed to fetch timeline items')
@@ -89,10 +100,9 @@ export async function getTimelineItem(id: number): Promise<Milestone | null> {
       }
     })
     const data = await handleXanoResponse(response)
-    const item = data.result1 || data.item || data
-    return transformXanoItem(item)
+    return transformXanoItem(data)
   } catch (error) {
-    console.error('Failed to fetch timeline item:', error)
+    console.error(`Failed to fetch timeline item ${id}:`, error)
     return null
   }
 }

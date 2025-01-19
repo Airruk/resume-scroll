@@ -1,4 +1,4 @@
-export type MilestoneType = 'career' | 'education' | 'volunteer' | 'personal'
+export type MilestoneType = 'career' | 'education' | 'volunteer' | 'personal' | 'family'
 
 export interface XanoTimelineItem {
   id: number
@@ -16,6 +16,19 @@ export interface XanoTimelineItem {
   field: string
   created_at: string
   updated_at: string
+  company_logo?: {
+    url: string
+    access: string
+    path: string
+    name: string
+    type: string
+    size: number
+    mime: string
+    meta: {
+      width: number
+      height: number
+    }
+  }
   _timeline_entry_skills: Array<{
     id: number
     timeline_entry_id: number
@@ -36,6 +49,8 @@ export interface Milestone {
   location: string
   description: string
   dateRange: string
+  startDate: string
   type: MilestoneType
   skills: string[]
+  logoUrl?: string
 }
