@@ -42,7 +42,7 @@ export default function TimelineMilestone({ milestone, isEven }: TimelineMilesto
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const year = milestone.dateRange.match(/\d{4}/)?.[0] || '2025'
+            const year = milestone.startDate.match(/\d{4}/)?.[0] || '2025'
             setCurrentYear(year)
           }
         })
@@ -62,7 +62,7 @@ export default function TimelineMilestone({ milestone, isEven }: TimelineMilesto
         observer.unobserve(card)
       }
     }
-  }, [milestone.dateRange, setCurrentYear])
+  }, [milestone.startDate, setCurrentYear])
 
   const bullets = entryDetails?.result1._timeline_entry_bullets?.sort(
     (a, b) => a.display_order - b.display_order
@@ -100,7 +100,7 @@ export default function TimelineMilestone({ milestone, isEven }: TimelineMilesto
                 <h3 className="text-lg font-semibold">{milestone.title}</h3>
                 <span className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
                   <CalendarIcon className="h-4 w-4" />
-                  {milestone.dateRange}
+                  {milestone.startDate}
                 </span>
               </div>
               {milestone.logoUrl && (
@@ -128,7 +128,7 @@ export default function TimelineMilestone({ milestone, isEven }: TimelineMilesto
           <p className="mb-4 text-sm">{milestone.description}</p>
 
           {/* Skills */}
-          {milestone.skills?.length > 0 && (
+          {milestone.skills && milestone.skills.length > 0 && (
             <div className="mb-4">
               <div className="flex flex-wrap gap-2">
                 {milestone.skills.map((skill, i) => (

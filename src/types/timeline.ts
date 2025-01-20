@@ -6,12 +6,12 @@ export interface XanoTimelineItem {
   startDate: string
   endDate?: string
   displayDate: string
-  type: string
+  type: MilestoneType
   description: string
   location: string
   role: string
   company: string
-  company_logo_hosted_url: string
+  company_logo_hosted_url?: string
   companySize: number
   directReports: number
   institution: string | null
@@ -46,13 +46,18 @@ export interface XanoTimelineItem {
 export interface Milestone {
   id: number
   title: string
+  startDate: string
+  endDate?: string
+  displayDate: string
+  type: MilestoneType
+  description: string
+  location: string
   role: string
   company: string
-  location: string
-  description: string
-  dateRange: string
-  startDate: string
-  type: MilestoneType
-  skills: string[]
   logoUrl?: string
+  companySize: number
+  directReports: number
+  institution: string | null
+  field: string | null
+  skills?: string[]
 }

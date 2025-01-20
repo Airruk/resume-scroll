@@ -1,4 +1,4 @@
-import { Milestone } from '@/types/timeline'
+import { Milestone, MilestoneType } from '@/types/timeline'
 
 const API_BASE_URL = 'https://x8ki-letl-twmt.n7.xano.io/api:iPX4-MHX'
 
@@ -34,22 +34,27 @@ interface XanoTimelineItem {
 }
 
 function transformXanoItem(item: XanoTimelineItem): Milestone {
+  const skills = item._timeline_entry_skills?.map(entry => 
+    entry._skills?.[0]?.name
+  ).filter((name): name is string => !!name) || []
+
   return {
     id: item.id,
     title: item.title,
-    startDate: new Date(item.startDate),
-    endDate: item.endDate ? new Date(item.endDate) : undefined,
+    startDate: item.startDate,
+    endDate: item.endDate,
     displayDate: item.displayDate,
-    type: item.type,
+    type: item.type as MilestoneType,
     description: item.description,
     location: item.location,
     role: item.role,
     company: item.company,
-    logoUrl: item.company_logo_hosted_url,
+    logoUrl: item.company_logo_hosted_url || undefined,
     companySize: item.companySize,
     directReports: item.directReports,
     institution: item.institution,
     field: item.field,
+    skills: skills.length > 0 ? skills : undefined
   }
 }
 
