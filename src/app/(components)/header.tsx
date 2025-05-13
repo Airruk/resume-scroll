@@ -30,19 +30,18 @@ export function Header({ className = '' }: HeaderProps) {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-4">
-            <Avatar>
-              <AvatarImage 
-                src="https://github.com/airruk.png" 
-                alt="Profile picture" 
-              />
-              <AvatarFallback>AR</AvatarFallback>
-            </Avatar>
+            <a href="/me" className="cursor-pointer">
+              <Avatar>
+                <AvatarImage 
+                  src="https://github.com/airruk.png" 
+                  alt="Profile picture" 
+                />
+                <AvatarFallback>AR</AvatarFallback>
+              </Avatar>
+            </a>
             <nav className="flex items-center gap-4">
               <Button variant="ghost" size="sm" asChild>
-                <a href="/">Career History</a>
-              </Button>
-              <Button variant="ghost" size="sm" asChild>
-                <a href="/about">About</a>
+                <a href="/career">Career History</a>
               </Button>
             </nav>
           </div>
