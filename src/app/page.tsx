@@ -10,7 +10,7 @@ export default function LandingPage() {
   useEffect(() => {
     // Redirect to me page
     router.push('/me')
-  }, [])
+  }, [router])
 
   return (
     <MainLayout>

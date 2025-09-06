@@ -2,14 +2,14 @@
 
 declare global {
   interface Window {
-    dataLayer: any[];
-    gtag: (...args: any[]) => void;
+    dataLayer: unknown[];
+    gtag: (...args: unknown[]) => void;
   }
 }
 
 export interface GTMEvent {
   event: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface GTMPageView {
@@ -24,7 +24,7 @@ export interface GTMCustomEvent {
   event_category?: string;
   event_label?: string;
   value?: number;
-  custom_parameters?: Record<string, any>;
+  custom_parameters?: Record<string, unknown>;
 }
 
 // Helper function to push events to dataLayer
