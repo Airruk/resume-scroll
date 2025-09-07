@@ -8,7 +8,6 @@ import { QueryProvider } from '@/components/providers/query-provider'
 import { FilterProvider } from '@/contexts/filter-context'
 import { Toaster } from '@/components/ui/toaster'
 import { YearProvider } from '@/contexts/year-context'
-import GtmDebug from '@/components/atoms/gtm-debug'
 import GoogleTagManager from '@/components/atoms/gtm'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -57,7 +56,6 @@ export default function RootLayout({
               </YearProvider>
             </FilterProvider>
             <Toaster />
-            <GtmDebug />
           </ThemeProvider>
         </QueryProvider>
       </body>
