@@ -1,7 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import MainLayout from '@/components/templates/main-layout'
+// Fix JSX identifier error by using destructured import
+import { default as MainLayout } from '@/components/templates/main-layout'
 
 export default function AboutPage() {
   return (
@@ -34,7 +35,33 @@ export default function AboutPage() {
             <br />
             <br />Outside of work, I&apos;m a <strong className="font-highlight">husband</strong>, a <strong className="font-highlight-invert">dad</strong>, a tinkerer, and someone who&apos;s <strong className="font-highlight">endlessly fascinated</strong> by how technology can <strong className="font-highlight-invert">help us reshape</strong> our world to the benefit of all.
             <br />
-            <br />If I sound like your vibe, let&apos;s connect!
+            <br />If I sound like your vibe,
+            <br />
+            <br /><a href="https://www.linkedin.com/in/ericcraigdoster?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BsjALuwF9T4WuuR6lVejreA%3D%3D">let&apos;s connect! </a>
+            <br />or
+            
+            <style jsx>{`
+              .libutton {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 7px;
+                text-align: center;
+                outline: none;
+                text-decoration: none !important;
+                color: #ffffff !important;
+                width: 200px;
+                height: 32px;
+                border-radius: 16px;
+                background-color: #0A66C2;
+                font-family: "SF Pro Text", Helvetica, sans-serif;
+                margin-left: auto;
+                margin-right: auto;
+              }
+            `}</style>
+            <div className="flex justify-center my-4">
+              <a className="libutton" href="https://www.linkedin.com/comm/mynetwork/discovery-see-all?usecase=PEOPLE_FOLLOWS&followMember=ericcraigdoster" target="_blank" rel="noopener noreferrer">Follow on LinkedIn</a>
+            </div>
             </p>
           </div>
         </div>
