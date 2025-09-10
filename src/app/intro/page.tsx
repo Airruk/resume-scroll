@@ -11,7 +11,7 @@ export default function IntroPage() {
           <div className="aspect-video w-full">
             <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
               <iframe 
-                src="https://www.loom.com/embed/cd467045f1aa4f87b1314e8b2f5f247c?sid=1c80c119-0335-45d7-a7e6-fd8b5c9c52c3" 
+                src="https://www.loom.com/embed/1c1fdec5e4ef420b984dc8518fe6529e?sid=d84a0e84-0ce8-414a-ba9e-589b6ba5d0df" 
                 frameBorder="0" 
                 allowFullScreen 
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
