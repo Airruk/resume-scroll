@@ -34,7 +34,7 @@ export default function AboutPage() {
             <br />
             <br />Outside of work, I&apos;m a <strong className="font-highlight">husband</strong>, a <strong className="font-highlight-invert">dad</strong>, a tinkerer, and someone who&apos;s <strong className="font-highlight">endlessly fascinated</strong> by how technology can <strong className="font-highlight-invert">help us reshape</strong> our world to the benefit of all.
             <br />
-            <br />If that sounds like your vibe, let&apos;s connect—I&apos;m always up for the next great challenge.
+            <br />If I sound like your vibe, let&apos;s connect!
             </p>
           </div>
         </div>
